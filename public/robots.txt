@@ -1,0 +1,53 @@
+# Die Cut Studio — robots.txt
+# Everything is public and meant to be indexed. Update the Sitemap host below to
+# your real production domain (also set SITE_URL in src/seo/siteConfig.ts).
+
+User-agent: *
+Allow: /
+
+# ---- AI / LLM crawlers: explicitly welcome (we WANT AI-search visibility) ----
+# Search-grounding + assistant crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap (regenerated at build time from the model registry)
+Sitemap: https://diecutstudio.com/sitemap.xml

@@ -1,0 +1,16 @@
+{
+  "name": "Die Cut Studio — Dieline & Box Template Generator",
+  "short_name": "Die Cut Studio",
+  "description": "Free parametric dieline generator. Pick a box, tray, tag or envelope template, type the size, preview it folded in 3D and export a 1:1 PDF, SVG or DXF cut file for Cricut, Silhouette and laser cutters.",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#4a1f28",
+  "categories": ["productivity", "graphics", "utilities", "design"],
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

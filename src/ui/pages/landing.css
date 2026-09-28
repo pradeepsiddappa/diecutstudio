@@ -1,0 +1,612 @@
+/* Craft landing page styles. Scoped to .landing so they can't bleed into the
+   editor's existing styles.css. Design language: warm cream bg, 1.5px black
+   borders, offset shadows (mustard / mint), Plus Jakarta + Inter type. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap");
+
+.landing {
+  --cream: #ffffff;       /* page background (was warm cream #faf6ee) */
+  --blush: #ffe7ea;       /* brand ground — used on the top nav (the "Blush" mark) */
+  --ink: #1d1b1a;
+  --muted: #6b6357;
+  --mustard: #ffd166;
+  --mint: #c9f2dc;
+  --mint-ink: #13693a;
+  --peach: #ffd0b8;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.landing * { box-sizing: border-box; }
+
+/* ===== Nav ===== */
+.landing .nav {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--ink);
+  background: var(--blush);
+}
+.landing .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 800 18px/1 "Plus Jakarta Sans";
+  letter-spacing: -0.01em;
+}
+.landing .logo .ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 8px;
+}
+.landing .nav-links { display: flex; align-items: center; gap: 6px; }
+.landing .nav-links a {
+  text-decoration: none;
+  color: var(--ink);
+  font: 600 14px/1 Inter;
+  padding: 9px 13px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s ease;
+  cursor: pointer;
+}
+.landing .nav-links a:hover { background: #fff7ed; }
+
+/* The full-bleed catalog page makes the nav span the whole width (no centered
+   max-width container like the old hero homepage). */
+.landing-catalog .nav {
+  max-width: none;
+  margin: 0;
+}
+
+/* ===== Catalog layout: [ sidebar | grid ] ===== */
+.landing .catalog {
+  display: grid;
+  grid-template-columns: 272px 1fr;
+  min-height: calc(100vh - 73px); /* viewport minus the nav height */
+}
+
+/* ---- Left sidebar ---- */
+.landing .side {
+  border-right: 1.5px solid var(--ink);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: calc(100vh - 73px);
+  overflow-y: auto;
+  padding: 18px 14px 40px;
+  background: var(--cream);
+}
+.landing .side-head {
+  font: 700 11px/1 "Plus Jakarta Sans";
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 18px 6px 8px;
+}
+.landing .side-head:first-child { margin-top: 2px; }
+
+.landing .cat-list { display: flex; flex-direction: column; gap: 1px; }
+.landing .cat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 9px 10px;
+  border-radius: 10px;
+  font: 700 14px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+  text-align: left;
+}
+.landing .cat:hover { background: #fff7ed; }
+.landing .cat.on {
+  background: var(--blush);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+.landing .cat .ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  color: var(--ink);
+}
+.landing .cat .lbl { flex: 1; min-width: 0; }
+.landing .cat .n {
+  font: 800 11px/1 "Plus Jakarta Sans";
+  color: var(--muted);
+  background: #f1efed;
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+.landing .cat.on .n { background: #fff; color: var(--ink); }
+
+/* ---- Refine facet accordions ---- */
+.landing .facets { display: flex; flex-direction: column; }
+.landing .facet { border-top: 1.5px solid #ece9e6; }
+.landing .facet:first-child { border-top: none; }
+.landing .facet-sum {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 11px 6px;
+  font: 800 13px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+  text-align: left;
+}
+.landing .facet-caret {
+  margin-left: auto;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.landing .facet.open .facet-caret { transform: rotate(90deg); }
+.landing .facet-opts { padding: 0 0 8px; display: flex; flex-direction: column; gap: 1px; }
+.landing .opt {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  font: 600 13px/1.2 Inter;
+  color: #39332e;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.landing .opt:hover { background: #fff7ed; }
+.landing .opt input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--ink);
+  cursor: pointer;
+  margin: 0;
+}
+.landing .opt .lbl { flex: 1; min-width: 0; }
+.landing .opt .n { color: #a59c95; font: 600 11px/1 "Plus Jakarta Sans"; }
+
+/* ---- Right column ---- */
+.landing .catalog-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.landing .catalog-top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--cream);
+  border-bottom: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+}
+.landing .catalog-top h1 {
+  font: 800 22px/1 "Plus Jakarta Sans";
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.landing .catalog-top .search {
+  flex: 1;
+  max-width: 440px;
+  box-shadow: none;
+  border-radius: 12px;
+}
+.landing .filter-btn {
+  display: none; /* mobile only */
+  align-items: center;
+  gap: 7px;
+  border: 1.5px solid var(--ink);
+  background: #fff;
+  border-radius: 12px;
+  padding: 9px 13px;
+  font: 700 13px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Active filters bar (count + removable chips + clear all) */
+.landing .filt-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 22px;
+  border-bottom: 1.5px solid #ece9e6;
+}
+.landing .filt-bar .count {
+  font: 800 13px/1 "Plus Jakarta Sans";
+  color: var(--muted);
+  margin-right: 4px;
+}
+.landing .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blush);
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 6px 4px 11px;
+  font: 700 12px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+}
+.landing .chip button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #fff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1.5px var(--ink);
+  color: var(--ink);
+  padding: 0;
+}
+.landing .filt-bar .clear {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: 700 12px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: auto;
+}
+
+/* ---- Mobile drawer ---- */
+.landing .side-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(29, 27, 26, 0.42);
+  z-index: 40;
+}
+.landing .side-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 290px;
+  max-width: 86vw;
+  z-index: 41;
+  border-right: 1.5px solid var(--ink);
+  box-shadow: 6px 0 0 rgba(29, 27, 26, 0.08);
+  overflow-y: auto;
+}
+.landing .drawer-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--ink);
+  background: #fff;
+  border-radius: 9px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.landing .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  font: 700 14px/1 "Plus Jakarta Sans";
+  border-radius: 10px;
+  padding: 11px 16px;
+  margin: 0; /* override the editor's global `.btn { margin-top: 8px }` if it has leaked in */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+}
+.landing .btn-pri {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: 3px 3px 0 var(--mustard);
+}
+.landing .btn-pri:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--mustard);
+}
+.landing .btn-out {
+  background: #fff;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.landing .btn-out:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+/* ===== Search box (used in the catalog top bar) ===== */
+.landing .search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 9px 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  min-width: 280px;
+  color: var(--muted);
+}
+.landing .search input {
+  border: none;
+  outline: none;
+  background: none;
+  font: 600 14px/1 Inter;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+}
+.landing .search input::placeholder { color: var(--muted); }
+.landing .search-clear {
+  display: inline-flex;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0;
+}
+.landing .search-clear:hover { color: var(--ink); }
+
+/* ===== Empty state ===== */
+.landing .empty {
+  text-align: center;
+  margin: 40px 22px;
+  padding: 60px 20px;
+  border: 1.5px dashed var(--ink);
+  border-radius: 16px;
+  color: var(--muted);
+}
+.landing .empty p { font: 600 16px/1.4 Inter; margin: 0 0 16px; }
+
+/* Full-bleed card grid (edge-to-edge inside the right column). auto-fill so the
+   number of columns flexes with the available width. */
+.landing .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+  padding: 20px 22px 40px;
+  align-content: start;
+}
+.landing .card {
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  color: var(--ink);
+  display: block;
+}
+.landing .card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.landing .thumb {
+  aspect-ratio: 5/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1.5px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.landing .card:nth-child(6n + 1) .thumb { background: var(--mint); }
+.landing .card:nth-child(6n + 2) .thumb { background: var(--peach); }
+.landing .card:nth-child(6n + 3) .thumb { background: #e0d4ff; }
+.landing .card:nth-child(6n + 4) .thumb { background: #ffeaa7; }
+.landing .card:nth-child(6n + 5) .thumb { background: #bce5ff; }
+.landing .card:nth-child(6n + 6) .thumb { background: #fcc6d9; }
+
+/* iso thumb crossfade on hover */
+.landing .iso-thumb-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landing .iso-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.28s ease, transform 0.42s cubic-bezier(0.32, 0.72, 0.32, 1);
+}
+/* 3D snapshot <img> rendered by snapshotBox(). Fills most of the thumb so the
+   box reads clearly; the drop-shadow follows the box silhouette (transparent
+   PNG), grounding it on the pastel card. */
+.landing img.iso-svg {
+  height: 94%;
+  width: auto;
+  max-width: 94%;
+  object-fit: contain;
+  filter: drop-shadow(0 9px 11px rgba(70, 56, 30, 0.22));
+}
+
+/* DEFAULT (no snapshot yet / unsupported model): show the flat dieline. */
+.landing .iso-open { opacity: 0; transform: translate(-50%, -50%) scale(0.94); }
+
+/* WITH a 3D snapshot: the folded BOX is the default (instantly recognisable as
+   a box); hovering the card reveals the flat cut-file dieline behind it. */
+.landing .has-3d .iso-closed { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
+.landing .has-3d .iso-open   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.landing .card:hover .has-3d .iso-closed { opacity: 1; transform: translate(-50%, -50%) scale(1.03); }
+.landing .card:hover .has-3d .iso-open   { opacity: 0; transform: translate(-50%, -50%) scale(0.92); }
+
+/* Hover hint: a tiny "Cut file" tag while the dieline is revealed. */
+.landing .has-3d::after {
+  content: "Cut file";
+  position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%) translateY(4px);
+  font: 700 9.5px/1 "Plus Jakarta Sans"; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink); background: rgba(255,255,255,.82); border: 1px solid var(--ink);
+  border-radius: 999px; padding: 3px 8px; opacity: 0; transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+.landing .card:hover .has-3d::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.landing .meta { padding: 18px 20px; }
+.landing .meta .name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  gap: 8px;
+}
+.landing .meta .name {
+  font: 800 17px/1.2 "Plus Jakarta Sans";
+}
+.landing .meta .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 10px/1 "Plus Jakarta Sans";
+  color: var(--mint-ink);
+  background: var(--mint);
+  border: 1px solid var(--ink);
+  padding: 4px 7px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.landing .meta .status.planned {
+  color: #a16207;
+  background: #ffeaa7;
+}
+.landing .meta .common {
+  font: 500 13px/1.4 Inter;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.landing .meta .tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+.landing .meta .tagrow span {
+  font: 700 11px/1 "Plus Jakarta Sans";
+  background: var(--ink);
+  color: var(--cream);
+  padding: 5px 8px;
+  border-radius: 5px;
+}
+
+/* "New" badge on a thumbnail */
+.landing .thumb .new-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font: 800 11px/1 "Plus Jakarta Sans";
+  letter-spacing: 0.02em;
+  background: var(--mustard);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  padding: 4px 9px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+/* "Cut-tested ✓" — the trust badge (top-right, mint). Set only after a real
+   physical cut-test, so it carries weight. */
+.landing .thumb .tested-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  font: 800 11px/1 "Plus Jakarta Sans";
+  background: var(--mint);
+  color: var(--mint-ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  padding: 4px 9px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.landing .meta .open {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 13px/1 "Plus Jakarta Sans";
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ===== Footer ===== */
+.landing .foot {
+  margin-top: auto; /* pin to the bottom of the right column */
+  padding: 24px 22px 30px;
+  border-top: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font: 500 12px/1.5 Inter;
+  color: var(--muted);
+}
+.landing .foot a {
+  color: var(--ink);
+  text-decoration: none;
+  margin-left: 14px;
+}
+.landing .foot a:hover { text-decoration: underline; }
+
+/* ===== Responsive (tablet → phone) =====
+   Desktop (≥900px) shows the persistent left sidebar. Under 900px the sidebar
+   collapses into a slide-in drawer opened by the "Filters" button. */
+@media (max-width: 900px) {
+  /* Single column: the desktop sticky sidebar is hidden; the drawer takes over. */
+  .landing .catalog { grid-template-columns: 1fr; min-height: 0; }
+  /* Hide only the STICKY sidebar, not the drawer (both are `aside.side` direct
+     children of .catalog — the :not keeps the more-specific hide rule from also
+     hiding the drawer, which a plain `.side-drawer{display:block}` lost to). */
+  .landing .catalog > aside.side:not(.side-drawer) { display: none; }
+  .landing .side-drawer { display: block; }             /* drawer takes over */
+  .landing .filter-btn { display: inline-flex; }        /* show the toggle */
+
+  .landing .catalog-top { flex-wrap: wrap; }
+  .landing .catalog-top .search { order: 3; flex-basis: 100%; max-width: none; }
+}
+@media (max-width: 560px) {
+  /* Nav: logo + primary CTA only. The secondary text links are hidden on
+     phones — "Templates" jumps to the catalog directly below, "Docs" is in the
+     drawer-adjacent footer. */
+  .landing .nav { padding: 14px 16px; }
+  .landing .nav-links a { display: none; }
+  .landing .nav .btn { padding: 10px 13px; }
+
+  .landing .catalog-top { padding: 12px 16px; }
+  .landing .grid { padding: 16px 16px 32px; gap: 14px; }
+  .landing .filt-bar { padding: 10px 16px; }
+
+  /* Footer stacks; the copyright line is long. */
+  .landing .foot { flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px 16px 28px; }
+  .landing .foot a { margin: 0 14px 0 0; }
+}

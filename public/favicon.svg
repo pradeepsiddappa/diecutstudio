@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Die Cut Studio favicon: the dieline triad (solid rings) on a blush tile.
+       Mirrors the wordmark's triad-"o" (src/ui/components/Logo.tsx). Rings use
+       r = disc r − strokeWidth/2 so all three read at the same outer diameter. -->
+  <rect width="64" height="64" rx="15" fill="#ffe7ea"/>
+  <circle cx="20" cy="32" r="11" fill="#2a45c4"/>
+  <circle cx="32" cy="32" r="9.5" fill="none" stroke="#e0322b" stroke-width="3"/>
+  <circle cx="44" cy="32" r="9.5" fill="none" stroke="#2bb24c" stroke-width="3"/>
+</svg>

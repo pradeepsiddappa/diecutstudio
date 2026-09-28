@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# local env / secrets — never commit these
+.env
+.env.*
+!.env.example
+*.local
+
+# os / editor
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json

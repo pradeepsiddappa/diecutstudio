@@ -1,0 +1,26 @@
+#!/bin/sh
+# Pre-commit gate: typecheck + tests must pass, plus a reminder to consider
+# whether new test cases are needed. Enabled via: git config core.hooksPath
+# .githooks  (done automatically by `npm install`'s "prepare" script).
+set -e
+
+echo "▶ pre-commit: typecheck"
+npm run --silent typecheck
+
+echo "▶ pre-commit: tests"
+npm run --silent test
+
+# Reminder: source changed but no tests touched?
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+src_changed=$(printf "%s\n" "$staged" | grep -E '^src/.*\.(ts|tsx)$' | grep -v '\.test\.' || true)
+tests_changed=$(printf "%s\n" "$staged" | grep -E '^tests/' || true)
+
+if [ -n "$src_changed" ] && [ -z "$tests_changed" ]; then
+  echo ""
+  echo "⚠  You changed source files but didn't touch tests/."
+  echo "   Consider whether test cases need to be added/updated in tests/diecut.test.ts."
+  echo "   (Reminder only — commit will proceed.)"
+  echo ""
+fi
+
+echo "✓ pre-commit checks passed"

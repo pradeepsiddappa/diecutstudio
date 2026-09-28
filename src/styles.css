@@ -1,0 +1,419 @@
+/* Editor styles — "Variation 2" layout (canvas-first + right properties rail
+   with the 3D preview pinned on top), in the Craft design language (cream bg,
+   1.5px ink borders, mustard/mint accents, Plus Jakarta + Inter type) to match
+   the landing page. (Fonts are loaded via a <link> in index.html, not an
+   @import here, so this critical stylesheet doesn't block on the font fetch.) */
+
+* { box-sizing: border-box; }
+:root {
+  --cream: #ffffff;       /* page background */
+  --blush: #ffe7ea;       /* brand ground — used on the top nav (the "Blush" mark) */
+  --ink: #1d1b1a;
+  --muted: #6b6357;
+  --line: #e8e7ec;        /* neutral hairline (was warm beige) */
+  --mustard: #ffd166;
+  --mint: #c9f2dc;
+  --mint-ink: #13693a;
+  --panel: #ffffff;       /* rail + topbar panels (was off-white #fffdf8) */
+  --accent: #1f3bb3; /* cut blue — kept for inputs focus + dieline legend */
+  --red: #e0322b;
+}
+html, body, #root { height: 100%; margin: 0; }
+body {
+  font: 14px/1.45 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* ===== Page shell: top nav + body ===== */
+.editor-page { display: flex; flex-direction: column; height: 100vh; }
+
+.ed-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px; border-bottom: 1.5px solid var(--ink); background: var(--blush);
+  flex: none;
+}
+.ed-nav .logo {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  font: 800 18px/1 "Plus Jakarta Sans"; letter-spacing: -0.01em; color: var(--ink);
+  text-decoration: none;
+}
+.ed-nav .logo .ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; background: var(--ink); color: var(--cream); border-radius: 8px;
+}
+.ed-nav .nav-links { display: flex; align-items: center; gap: 4px; }
+.ed-nav .nav-links a {
+  text-decoration: none; color: var(--ink); font: 600 14px/1 Inter;
+  padding: 9px 13px; border-radius: 8px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ed-nav .nav-links a:hover { background: #fff7ed; }
+.ed-nav .nav-cta {
+  background: var(--ink); color: var(--cream); box-shadow: 3px 3px 0 var(--mustard);
+  font: 700 14px/1 "Plus Jakarta Sans"; border-radius: 10px; padding: 11px 16px;
+}
+.ed-nav .nav-cta:hover { background: var(--ink); }
+
+/* ===== Body: full-bleed canvas + floating inspector ===== */
+/* The toolbar is hoisted OUT of .main to sit between the nav and .app, so .app
+   starts below it; the inspector floats over the full-width canvas. */
+.app { position: relative; display: block; flex: 1; min-height: 0; }
+.main { display: flex; flex-direction: column; min-width: 0; height: 100%; }
+
+/* ----- top toolbar above the canvas ----- */
+.topbar {
+  display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+  border-bottom: 1.5px solid var(--ink); background: var(--panel); flex: none;
+}
+.model-title { font: 800 15px "Bricolage Grotesque"; color: var(--ink); letter-spacing: -.01em; }
+.tb-div { width: 1.5px; height: 18px; background: var(--line); display: inline-block; }
+.dims { font: 600 12.5px Inter; color: var(--muted); }
+.dims b { color: var(--ink); }
+.legend { display: flex; gap: 14px; font-size: 11px; color: var(--muted); margin-left: auto; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.muted { color: var(--muted); }
+
+.seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 9px; overflow: hidden; }
+.seg button { border: none; background: #fff; padding: 6px 13px; cursor: pointer; font: 700 12.5px "Plus Jakarta Sans"; color: var(--ink); }
+.seg button.active { background: var(--ink); color: var(--cream); }
+.tools button { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; color: var(--ink); }
+.tools button.active { color: var(--cream); }
+.zoom { display: inline-flex; gap: 6px; align-items: center; }
+.zoom button { min-width: 28px; height: 28px; padding: 0 7px; border: 1.5px solid var(--ink); background: #fff; border-radius: 8px; cursor: pointer; font: 700 12px "Plus Jakarta Sans"; color: var(--ink); }
+.zoom button.active { background: var(--ink); color: var(--cream); }
+
+/* ----- canvas ----- */
+.canvas-wrap {
+  flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+  background:
+    linear-gradient(45deg, #ececef 25%, transparent 25%),
+    linear-gradient(-45deg, #ececef 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ececef 75%),
+    linear-gradient(-45deg, transparent 75%, #ececef 75%), #ffffff;
+  background-size: 22px 22px;
+  background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+  overflow: hidden; padding: 24px; touch-action: none; position: relative;
+}
+.die-svg { background: transparent; }
+.canvas-wrap.pan { cursor: grab; }
+.canvas-wrap.panning { cursor: grabbing; }
+.canvas-wrap.pan .die-svg, .canvas-wrap.panning .die-svg { cursor: inherit; }
+
+/* sheet-fit hover overlay (stays on the canvas) */
+.sheet-overlay {
+  position: absolute; top: 16px; left: 16px; background: #fff;
+  border: 1.5px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--ink);
+  padding: 12px; z-index: 10; pointer-events: none;
+}
+.sheet-overlay-head { font: 700 12px "Plus Jakarta Sans"; margin-bottom: 8px; }
+.sheet-overlay-foot { font-size: 12px; margin-top: 8px; text-align: center; }
+.sheet-overlay-foot .ok { color: var(--mint-ink); font-weight: 700; }
+.sheet-overlay-foot .no { color: #b3261e; font-weight: 700; }
+
+/* ===== Floating inspector: category cards float over the canvas (top-right),
+   each collapses to a white pill. (Option D — floating cards.) =====
+   The width includes the inner padding (border-box); the padding gives the
+   cards' hard offset-shadow + the scrollbar room so the right edge isn't
+   clipped by this container's overflow. */
+/* The inspector is a fixed-height FLOATING panel: .rail is a non-scrolling
+   positioned wrapper, and .rail-scroll scrolls inside it. So the cards keep
+   their natural ("standard") height and the panel never squeezes them — it
+   scrolls, with chevron cues (below) signalling more content above/below. */
+.rail {
+  position: absolute; top: 14px; right: 12px; width: 352px;
+  max-height: calc(100% - 26px); overflow: visible;
+  display: flex; flex-direction: column; z-index: 12;
+}
+.rail .rail-scroll {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column; gap: 11px;
+  padding: 2px 14px 14px 4px; scrollbar-width: thin;
+}
+/* Cards keep their NATURAL height — never flex-shrink to cram into the panel
+   (that's the "squeeze"). The panel scrolls instead. */
+.rail .rail-scroll > * { flex: 0 0 auto; }
+/* Scroll cues — a chevron pill at the top/bottom edge when there's more to
+   scroll to (the partial card peeking past it reinforces "there's more"). */
+.rail-cue {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 30px; height: 30px; padding: 0; border-radius: 999px;
+  background: #fff; border: 1.5px solid var(--ink);
+  box-shadow: 0 3px 8px rgba(29,27,26,.24); cursor: pointer;
+  display: none; align-items: center; justify-content: center; z-index: 20;
+}
+.rail-cue:hover { background: var(--mustard, #ffd166); transform: translateX(-50%) scale(1.06); }
+.rail-cue-top { top: -2px; }
+.rail-cue-bot { bottom: 6px; }
+.rail.more-above .rail-cue-top { display: flex; }
+.rail.more-below .rail-cue-bot { display: flex; }
+.cue-chev { width: 8px; height: 8px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.rail-cue-bot .cue-chev { transform: translateY(-2px) rotate(45deg); }
+.rail-cue-top .cue-chev { transform: translateY(2px) rotate(-135deg); }
+.reset-link-top { align-self: flex-end; }
+
+/* ----- collapsible cards ----- */
+.group.card {
+  border: 1.5px solid var(--ink); border-radius: 14px; background: #fff;
+  box-shadow: 4px 4px 0 rgba(29,27,26,.13); overflow: hidden; padding: 0;
+  margin-bottom: 0;
+}
+.card-head {
+  width: 100%; display: flex; align-items: center; gap: 9px; padding: 11px 14px;
+  background: #fff; border: none; cursor: pointer; text-align: left;
+  font: 700 13px "Plus Jakarta Sans"; color: var(--ink);
+}
+.card-head .caret {
+  width: 10px; height: 10px; flex: none;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: rotate(-45deg); transition: transform .15s ease; margin-right: 2px;
+}
+.group.card.open .card-head .caret { transform: rotate(45deg); }
+.card-lbl { flex: 1; }
+.card-sum { font: 500 11px Inter; color: var(--muted); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* body = every child of the card after the header; hidden unless open */
+.group.card > :not(.card-head) { display: none; padding: 2px 14px 14px; }
+.group.card.open > :not(.card-head) { display: block; }
+/* collapsed = white pill */
+.group.card:not(.open) { border-radius: 999px; }
+.group.card:not(.open) .card-head { padding: 9px 16px; }
+.group.card:not(.open) .card-sum { display: none; }
+
+/* ----- 3D preview card (first card in the inspector) ----- */
+/* High enough specificity to beat the generic open-body `display:block` so the
+   stage keeps its centred flex column. */
+.preview-card .preview-stage {
+  /* DEFAULT stage (no card tint passed): faint cool vignette so the white box
+     still reads. When opened from a gallery card, the editor sets an inline
+     background = that card's exact thumbnail tint (see `stageBg`/?bg=).
+     (Selector note: the stage lives in .card-body and the card has no .open
+     class, so the old `.open > .preview-stage` selector never matched.) */
+  background: radial-gradient(circle at 50% 30%, #ffffff 0%, #ffffff 58%, #eef1f5 100%);
+  border-radius: 10px; display: flex; flex-direction: column; align-items: center;
+  margin-top: 6px; padding: 6px;
+}
+.preview-card .card-head .preview-expand { margin-left: auto; }
+/* Soft contact shadow that hugs the box silhouette (canvas is transparent, so
+   the drop-shadow follows the rendered box shape) — grounds it on the stage. */
+.preview-card canvas, .box3d-modal canvas { filter: drop-shadow(0 8px 18px rgba(33,37,48,0.11)); }
+.preview-head { align-self: flex-start; display: flex; align-items: center; justify-content: space-between; width: 100%; font: 700 11px/1 "Plus Jakarta Sans"; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+/* Expand-to-modal button */
+.preview-expand {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border: 1.5px solid var(--ink); border-radius: 7px;
+  background: #fff; color: var(--ink); cursor: pointer; flex: none;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.preview-expand:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 var(--mustard); }
+
+/* ---- Bigger 3D view modal ---- */
+.box3d-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(29,27,26,0.55);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  animation: b3dfade .14s ease;
+}
+@keyframes b3dfade { from { opacity: 0; } to { opacity: 1; } }
+.box3d-modal {
+  position: relative; background: radial-gradient(circle at 50% 32%, #ffffff 0%, #ffffff 58%, #eef1f5 100%);
+  border: 1.5px solid var(--ink); border-radius: 16px; box-shadow: 8px 8px 0 var(--ink);
+  padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  max-width: 92vw; max-height: 92vh;
+}
+.box3d-modal .b3d-title { align-self: flex-start; font: 800 16px/1 "Plus Jakarta Sans"; color: var(--ink); }
+.box3d-modal .b3d-sub { align-self: flex-start; font: 600 12px Inter; color: var(--muted); margin-top: -4px; }
+.box3d-modal .box-fold { max-width: 420px; }
+.box3d-close {
+  position: absolute; top: -14px; right: -14px; width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--ink); border-radius: 50%; background: var(--mustard);
+  color: var(--ink); cursor: pointer; box-shadow: 2px 2px 0 var(--ink);
+}
+.box3d-close:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink); }
+.preview-foot { font-size: 11px; margin-top: 4px; }
+.box-fold { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-top: 6px; width: 100%; padding: 0 6px; }
+.box-fold input[type="range"] { flex: 1; accent-color: var(--ink); }
+.preview-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; text-align: center; line-height: 1.5; padding: 24px 16px; }
+
+h1 { font: 800 16px/1.2 "Plus Jakarta Sans"; margin: 0 0 2px; }
+.sub { color: var(--muted); font-size: 12px; margin: 0 0 18px; }
+.reset-link {
+  color: var(--muted); text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+  background: none; border: none; padding: 0; font: 600 11.5px Inter;
+}
+.reset-link:hover { color: var(--ink); }
+.group { margin-bottom: 18px; }
+.group h3 { font: 700 11px/1 "Plus Jakarta Sans"; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 9px; }
+label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 9px; }
+input[type="number"], select {
+  width: 100%; padding: 9px 10px; border: 1.5px solid var(--ink); border-radius: 9px;
+  font: 600 14px Inter; background: #fff; color: var(--ink);
+}
+input:focus, select:focus { outline: 2px solid #c9d2f5; border-color: var(--accent); }
+
+.toggle { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--ink); margin-bottom: 7px; cursor: pointer; }
+/* Layers list in two columns */
+.layer-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
+.layer-grid .toggle { margin-bottom: 6px; }
+.toggle input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); }
+.swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+.btn {
+  width: 100%; padding: 11px; border: none; border-radius: 10px; background: var(--ink);
+  color: var(--cream); font: 700 14px "Plus Jakarta Sans"; cursor: pointer; margin-top: 8px;
+  box-shadow: 3px 3px 0 var(--mustard); transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--mustard); }
+.btn.secondary { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+.btn.secondary:hover { box-shadow: 5px 5px 0 var(--ink); }
+
+/* Sheet "fits / how-many-up" — selectable chips + one live layout preview. */
+.sheet-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+.sheet-chip {
+  display: inline-flex; align-items: baseline; gap: 4px;
+  border: 1.5px solid var(--ink); border-radius: 99px; background: #fff;
+  padding: 5px 10px; cursor: pointer; color: var(--ink);
+  font: 600 11.5px Inter; transition: transform .1s ease, box-shadow .1s ease, background .1s ease;
+}
+.sheet-chip:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+.sheet-chip b { font: 800 13px "Plus Jakarta Sans"; }
+.sheet-chip .sfx { font-size: 9.5px; color: var(--muted); margin-right: 1px; }
+.sheet-chip .nm { font-weight: 600; }
+.sheet-chip.on { background: var(--ink); color: var(--cream); }
+.sheet-chip.on .sfx { color: #c9c1ad; }
+.sub.tiny { font-size: 11px; margin: 6px 0 0; }
+.sheet-inline-preview {
+  margin-top: 12px; padding: 12px; display: flex; justify-content: center;
+  background: #fff; border: 1.5px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--ink);
+}
+.sheet-inline-preview .sheet-overlay-head { font: 700 12px "Plus Jakarta Sans"; margin-bottom: 8px; text-align: center; }
+.sheet-inline-preview .sheet-overlay-foot { font-size: 11.5px; margin-top: 8px; text-align: center; }
+.sheet-inline-preview .sheet-overlay-foot .ok { color: var(--mint-ink); font-weight: 700; }
+.sheet-inline-preview .sheet-overlay-foot .no { color: #b3261e; font-weight: 700; }
+
+/* Phone-only ↓ Export button in the toolbar (mustard, ink border, hard
+   shadow — matches the mockup). Hidden on desktop (the React tree only renders
+   it under 768px anyway, but the style lives here). */
+.tb-export {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+  background: var(--mustard); border: 1.5px solid var(--ink); border-radius: 9px;
+  box-shadow: 2px 2px 0 var(--ink); font: 800 12.5px "Plus Jakarta Sans";
+  color: var(--ink); padding: 7px 13px; cursor: pointer;
+}
+.tb-export:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ===== Tablet (768–1024px): dock the inspector below the canvas =====
+   The floating inspector covers too much of a narrow canvas, so on tablets the
+   body becomes a vertical stack — canvas first, then the cards full-width below
+   — and the whole page scrolls. Phones (< 768px) use the tab-bar UI instead. */
+@media (max-width: 1024px) {
+  .editor-page { height: auto; min-height: 100vh; }
+  .app { display: flex; flex-direction: column; }
+  .main { order: 1; height: 58vh; }
+  .rail {
+    position: static; width: auto; max-height: none; order: 2;
+    border-top: 1.5px solid var(--ink); padding: 14px;
+  }
+  /* Docked below the canvas: the WHOLE PAGE scrolls, so the inner scroller
+     flows naturally (no inner scrollbar) and the chevron cues are hidden. */
+  .rail .rail-scroll { overflow: visible; flex: none; min-height: 0; padding: 0; }
+  .rail-cue { display: none !important; }
+}
+@media (max-width: 720px) {
+  .ed-nav { padding: 12px 16px; }
+  .ed-nav .logo { white-space: nowrap; }
+  .ed-nav .nav-links a { padding: 8px 10px; }
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+  .legend { margin-left: 0; }
+}
+
+/* ===== Phone (< 768px): full-screen canvas + bottom tab bar → sheet =====
+   The floating inspector is not rendered here. Categories live in a fixed
+   bottom tab bar; tapping one raises a bottom sheet. Export is a toolbar
+   button that opens an Export sheet. (Overrides the tablet dock rules above —
+   the .rail isn't in the DOM on phones, so only the layout resets matter.) */
+@media (max-width: 767px) {
+  /* The page is a fixed-height app shell again so the canvas fills the screen
+     and the tab bar pins to the bottom (no whole-page scroll). */
+  .editor-page { height: 100vh; min-height: 0; }
+  .app { display: block; position: relative; flex: 1; min-height: 0; }
+  .main { order: 0; height: 100%; }
+
+  /* Canvas fills the area above the fixed 60px tab bar (+ safe area). */
+  .canvas-wrap { padding: 14px; padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 14px); }
+
+  .legend { display: none; }            /* the layer legend lives in the Layers sheet */
+  .model-title { font-size: 14px; }
+  .tb-div { display: none; }
+
+  /* ---- fixed bottom tab bar ---- */
+  .m-tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    height: calc(62px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex; align-items: stretch;
+    background: #fff; border-top: 1.5px solid var(--ink);
+    box-shadow: 0 -3px 14px rgba(29, 27, 26, .05);
+  }
+  .m-tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px; padding-top: 5px;
+    border: none; background: none; cursor: pointer;
+    font: 600 10.5px/1 Inter; color: var(--muted);
+    -webkit-tap-highlight-color: transparent;
+    transition: color .14s ease;
+  }
+  /* Lucide icon sits in a capsule; the active tab fills it with blush
+     (Material-3-style selected indicator). Icons inherit color via
+     currentColor, so the whole tab tints together. */
+  .m-tab .m-i {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 50px; height: 28px; border-radius: 999px;
+    transition: background .16s ease;
+  }
+  .m-tab .m-i svg { display: block; width: 22px; height: 22px; }
+  .m-tab.on { color: var(--ink); font-weight: 700; }
+  .m-tab.on .m-i { background: var(--blush); }
+  .m-tab.on .m-i svg { stroke-width: 2.25px; }
+  .m-tab:active .m-i { background: #f3f3f5; }
+  .m-lbl { letter-spacing: .01em; }
+
+  /* ---- backdrop + bottom sheet ---- */
+  .m-backdrop {
+    position: fixed; inset: 0; z-index: 44;
+    background: rgba(29, 27, 26, 0.34);
+    animation: m-fade .16s ease;
+  }
+  @keyframes m-fade { from { opacity: 0; } to { opacity: 1; } }
+  .m-sheet {
+    position: fixed; left: 0; right: 0;
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px)); /* sits above the tab bar */
+    z-index: 46;
+    background: #fff; border-top: 1.5px solid var(--ink);
+    border-radius: 20px 20px 0 0; box-shadow: 0 -6px 24px rgba(29, 27, 26, 0.16);
+    max-height: 80vh; display: flex; flex-direction: column;
+    animation: m-rise .26s cubic-bezier(.3, .9, .3, 1);
+  }
+  @keyframes m-rise { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .m-grab { width: 42px; height: 5px; border-radius: 3px; background: #ccc6c8; margin: 9px auto 4px; flex: none; }
+  .m-sheet-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2px 18px 12px; flex: none;
+  }
+  .m-sheet-head b { font: 800 17px "Bricolage Grotesque"; }
+  .m-x { font-size: 19px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 0 4px; line-height: 1; }
+  .m-sheet-body { overflow-y: auto; padding: 4px 18px calc(env(safe-area-inset-bottom, 0px) + 22px); -webkit-overflow-scrolling: touch; }
+  /* a small uppercase sub-label used to group Notch / Features / Print&Cut in
+     a single combined sheet */
+  .m-sub { font: 700 10.5px "Plus Jakarta Sans"; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 0 0 7px; }
+  .m-sub.mt { margin-top: 16px; }
+
+  /* The 3D preview stage in the sheet should be roomy. */
+  .m-sheet-body .preview-stage {
+    background: radial-gradient(circle at 50% 30%, #ffffff 0%, #ffffff 58%, #eef1f5 100%);
+    border-radius: 10px; display: flex; flex-direction: column; align-items: center;
+    padding: 8px;
+  }
+  .m-sheet-body .preview-stage canvas { filter: drop-shadow(0 8px 18px rgba(33, 37, 48, 0.11)); }
+}

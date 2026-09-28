@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<!-- Source for public/og-image.png (1200×630 social card). Rendered to PNG with
+     headless Chrome — see docs/seo.md. Uses the real "Blush" wordmark lockup
+     (two-tone "Die Cut Studio" with the dieline triad as the "o" in Studio). -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  .bg {
+    width: 1200px; height: 630px; background: #ffe7ea;
+    display: flex; padding: 20px;
+    font-family: Inter, system-ui, sans-serif;
+  }
+  .card {
+    flex: 1; background: #fff; border: 3px solid #1d1b1a; border-radius: 28px;
+    position: relative; overflow: hidden; padding: 80px 84px;
+  }
+  /* faint dieline motif, right side */
+  .motif { position: absolute; right: 64px; top: 150px; opacity: .15; }
+  /* wordmark lockup (matches src/ui/components/Logo.tsx) */
+  .lockup {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    font-family: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+    font-weight: 800; font-size: 42px; letter-spacing: -.012em; line-height: 1;
+  }
+  .lockup .die { color: #4a1f28; margin-right: .24em; }
+  .lockup .studio { color: #9c6a72; }
+  .lockup svg { height: .74em; width: auto; display: block; }
+  /* headline */
+  h1 {
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-weight: 800; font-size: 90px; line-height: 1.0; letter-spacing: -2px;
+    color: #4a1f28; margin-top: 96px;
+  }
+  .sub { font-weight: 600; font-size: 31px; color: #6b3b44; margin-top: 34px; }
+</style>
+</head>
+<body>
+  <div class="bg">
+    <div class="card">
+      <svg class="motif" width="360" height="240" viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#2a45c4" stroke-width="3" fill="none" stroke-linejoin="round">
+          <rect x="40" y="40" width="280" height="150" />
+          <path d="M112 40 v-26 q0 -10 10 -10 h44 q10 0 10 10 v26" />
+          <path d="M40 190 l18 30 h40 v-30 M226 190 v30 h40 l18 -30" />
+        </g>
+        <g stroke="#e0322b" stroke-width="2.5" stroke-dasharray="7 6" fill="none">
+          <line x1="112" y1="40" x2="112" y2="190" />
+          <line x1="190" y1="40" x2="190" y2="190" />
+        </g>
+      </svg>
+
+      <div class="lockup">
+        <span class="die">Die&nbsp;Cut</span><span class="studio">Studi</span><svg viewBox="0 0 61 30" aria-hidden="true"><circle cx="16" cy="15" r="13" fill="#2a45c4"/><circle cx="32" cy="15" r="11.5" fill="none" stroke="#e0322b" stroke-width="3"/><circle cx="45" cy="15" r="11.5" fill="none" stroke="#2bb24c" stroke-width="3"/></svg>
+      </div>
+
+      <h1>Box &amp; dieline<br>templates, free.</h1>
+      <p class="sub">Type a size · preview in 3D · export a 1:1 cut file.</p>
+    </div>
+  </div>
+</body>
+</html>
